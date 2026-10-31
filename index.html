@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>StitchCase — Demo v2</title>
+<style>body{font-family:system-ui,sans-serif;margin:0;background:#f6f7f9;color:#222}header{background:#111827;color:#fff;padding:24px 32px}h1{margin:0}nav{display:flex;gap:8px;padding:12px 32px;background:#fff;border-bottom:1px solid #e5e7eb}nav button{background:#eef2ff;border:0;padding:8px 14px;border-radius:999px;cursor:pointer}nav button.active{background:#111827;color:#fff}main{max-width:960px;margin:24px auto;padding:0 20px 40px}.card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:20px;margin-bottom:16px}.hidden{display:none}label{display:block;font-weight:600;margin:12px 0 4px}input,textarea,select{width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;box-sizing:border-box}button.primary{background:#111827;color:#fff;border:0;padding:12px 18px;border-radius:8px;cursor:pointer}.timeline{border-left:3px solid #111827;padding-left:16px}.timeline div{margin:14px 0}.tag{display:inline-block;background:#eef2ff;padding:2px 8px;border-radius:999px;font-size:12px}table{width:100%;border-collapse:collapse}td,th{border-bottom:1px solid #eee;padding:8px;text-align:left}.bar{height:10px;background:#e5e7eb;border-radius:999px;overflow:hidden}.bar i{display:block;height:100%;background:#111827;width:0;transition:width 1s}</style>
+</head><body>
+<header><h1>StitchCase</h1><p style="color:#cbd5e1">One intake, every document, a clear case timeline in minutes.</p></header>
+<nav>
+<button class="active" onclick="show('dashboard',this)">Dashboard</button>
+<button onclick="show('intake',this)">1. Intake</button>
+<button onclick="show('docs',this)">2. Documents</button>
+<button onclick="show('timeline',this)">3. Timeline</button>
+<button onclick="show('summary',this)">4. Summary &amp; Export</button>
+</nav>
+<main>
+<section id="dashboard" class="card"><h2>Dashboard</h2><p>3 active cases · 2 deadlines this week · 12 documents processed</p>
+<table><tr><th>Case</th><th>Next deadline</th><th>Status</th></tr><tr><td>Demo Client — Contract dispute</td><td>2026-05-20 Filing</td><td><span class="tag">In progress</span></td></tr><tr><td>Sample — Lease dispute</td><td>2026-05-25 Hearing prep</td><td><span class="tag">Review</span></td></tr></table>
+<p>Click <b>1. Intake</b> to start a new case, then walk through each step.</p></section>
+
+<section id="intake" class="card hidden"><h2>1. Case intake</h2>
+<label>Client name</label><input value="Demo Client">
+<label>Counterparty</label><input value="Demo Counterparty Ltd.">
+<label>Case type</label><select><option>Contract dispute</option><option>Lease dispute</option><option>Labour dispute</option></select>
+<label>Key facts</label><textarea rows="4">Contract signed 2026-03-01. Payment due 2026-04-01. Reminder sent 2026-04-15. Claim filed 2026-05-10.</textarea>
+<button class="primary" onclick="show('docs',document.querySelectorAll('nav button')[2])">Save &amp; continue →</button></section>
+
+<section id="docs" class="card hidden"><h2>2. Documents &amp; extraction</h2>
+<p>Upload contracts, emails and filings. The tool reads them and extracts parties, dates and amounts.</p>
+<table><tr><th>Document</th><th>Extracted</th></tr><tr><td>contract.pdf</td><td>Parties, 2026-03-01, amount</td></tr><tr><td>reminder-email.pdf</td><td>2026-04-15 reminder</td></tr><tr><td>filing.pdf</td><td>2026-05-10 claim</td></tr></table>
+<p>Parsing progress</p><div class="bar"><i id="bar"></i></div><br>
+<button class="primary" onclick="parse()">Run extraction</button>
+<button class="primary" onclick="show('timeline',document.querySelectorAll('nav button')[3])">View timeline →</button></section>
+
+<section id="timeline" class="card hidden"><h2>3. Timeline</h2>
+<div class="timeline">
+<div><b>2026-03-01</b> — Contract signed <span class="tag">contract.pdf</span></div>
+<div><b>2026-04-01</b> — Payment due <span class="tag">Deadline</span></div>
+<div><b>2026-04-15</b> — Reminder sent <span class="tag">reminder-email.pdf</span></div>
+<div><b>2026-05-10</b> — Claim filed <span class="tag">filing.pdf</span></div>
+<div><b>2026-05-20</b> — Filing deadline <span class="tag">Calendar reminder set</span></div>
+</div>
+<p>Click any date to see its source document. Conflicts are flagged for lawyer review, not auto-resolved.</p>
+<button class="primary" onclick="show('summary',document.querySelectorAll('nav button')[4])">Draft summary →</button></section>
+
+<section id="summary" class="card hidden"><h2>4. Summary &amp; Export</h2>
+<p><b>Draft summary (for lawyer review):</b> Demo Client signed a contract on 2026-03-01. Payment was due 2026-04-01, a reminder was sent 2026-04-15, and a claim was filed 2026-05-10. The next deadline is 2026-05-20.</p>
+<label>Edit summary before export</label><textarea rows="4">Add your notes here before exporting.</textarea><br><br>
+<button class="primary" onclick="alert('Exported: timeline.pdf + summary.docx (demo)')">Export timeline + summary</button>
+<p><i>Draft only — not a final decision.</i></p></section>
+</main>
+<script>function show(id,btn){document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}function parse(){let b=document.getElementById('bar');b.style.width='0';setTimeout(()=>b.style.width='100%',50);}</script>
+</body></html>
